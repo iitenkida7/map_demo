@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
-
     <head>
         <meta charset="UTF-8">
-        <title>Sample_GoogleMap</title>
+        <title>shopsMap</title>
         <script
-            src="https://maps.google.com/maps/api/js?key=hogehoge&language=ja"></script>
+            src="https://maps.google.com/maps/api/js?key=hogehogelanguage=ja"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <style>
+            
             html {
                 height: 100%
             }
@@ -26,28 +27,29 @@
     <div id="map"></div>
 
     <script>
-        var locations = [
-            { lat: 35.665498, lng: 139.75964 },
-            { lat: 35.681382, lng: 139.76608399999998 },
-            { lat: 35.675069, lng: 139.763328 }
-        ];
-        // var MyLatLng = new google.maps.LatLng(35.6811673, 139.7670516);
+
+// json import
+function readJSON(url) {
+    var request = new XMLHttpRequest();
+    request.open('GET', url, false);
+    request.send(null);
+    if (request.status == 200)
+        return request.responseText;
+};
+
+var shops = JSON.parse(readJSON('./data.json'));
         var Options = {
-            zoom: 15,      //地図の縮尺値
-            center: locations[1],    //地図の中心座標
-            mapTypeId: 'roadmap'   //地図の種類
+            zoom: 6,
+            center: { lat: 35.665498, lng: 139.75964 },
+            mapTypeId: 'roadmap'
         };
         var map = new google.maps.Map(document.getElementById('map'), Options);
-
-        locations.map(function (location) {
+        shops.query_result.data.rows.map( function (shop) {
             new google.maps.Marker({
-                position: location,
+                position: new google.maps.LatLng(parseFloat(shop.lat),parseFloat(shop.lng)),
                 map,
-                //title: "Hello World!",
             });
-
         });
-
     </script>
 
 </html>
